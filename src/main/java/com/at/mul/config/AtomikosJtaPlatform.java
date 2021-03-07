@@ -1,4 +1,4 @@
-package com.at.mul;
+package com.at.mul.config;
 
 import javax.transaction.TransactionManager;
 import javax.transaction.UserTransaction;

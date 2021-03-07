@@ -1,4 +1,4 @@
-package com.at.mul;
+package com.at.mul.config;
 
 import javax.transaction.TransactionManager;
 import javax.transaction.UserTransaction;
@@ -27,24 +27,23 @@ public class MainConfig {
 	public PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
 		return new PropertySourcesPlaceholderConfigurer();
 	}
-	
+
 	@Bean
 	public JpaVendorAdapter jpaVendorAdapter() {
 		HibernateJpaVendorAdapter hibernateJpaVendorAdapter = new HibernateJpaVendorAdapter();
-		hibernateJpaVendorAdapter.setShowSql(true);
 		hibernateJpaVendorAdapter.setGenerateDdl(true);
 		hibernateJpaVendorAdapter.setDatabase(Database.H2);
 		return hibernateJpaVendorAdapter;
 	}
 
-	@Bean(name = "userTransaction")
+	@Bean
 	public UserTransaction userTransaction() throws Throwable {
 		UserTransactionImp userTransactionImp = new UserTransactionImp();
 		userTransactionImp.setTransactionTimeout(10000);
 		return userTransactionImp;
 	}
 
-	@Bean(name = "atomikosTransactionManager", initMethod = "init", destroyMethod = "close")
+	@Bean
 	public TransactionManager atomikosTransactionManager() throws Throwable {
 		UserTransactionManager userTransactionManager = new UserTransactionManager();
 		userTransactionManager.setForceShutdown(false);
@@ -54,7 +53,7 @@ public class MainConfig {
 		return userTransactionManager;
 	}
 
-	@Bean(name = "transactionManager")
+	@Bean
 	@DependsOn({ "userTransaction", "atomikosTransactionManager" })
 	public PlatformTransactionManager transactionManager() throws Throwable {
 		UserTransaction userTransaction = userTransaction();
